@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulaire et Tableau des Achats</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    input, label {
+      display: block;
+      margin-bottom: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #333;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Formulaire d'achat</h2>
+
+  <form id="formAchat">
+    <!-- Date d'achat -->
+    <label for="dateAchat">Date d'achat :</label>
+    <input type="date" id="dateAchat" name="dateAchat" required>
+
+    <!-- Montant -->
+    <label for="montant">Montant de l'achat (€) :</label>
+    <input type="number" id="montant" name="montant" step="0.01" required>
+
+    <!-- Code -->
+    <label for="code">Code :</label>
+    <input type="text" id="code" name="code" required>
+
+    <!-- Titre de l'activité -->
+    <label for="titre">Titre de l’activité :</label>
+    <input type="text" id="titre" name="titre" required>
+
+    <button type="submit">Ajouter au tableau</button>
+  </form>
+
+  <h3>Tableau des achats</h3>
+  <table id="tableAchats">
+    <thead>
+      <tr>
+        <th>Date de soumission</th>
+        <th>Date d'achat</th>
+        <th>Montant (€)</th>
+        <th>Code</th>
+        <th>Titre de l’activité</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Les lignes ajoutées apparaîtront ici -->
+    </tbody>
+  </table>
+
+  <script>
+    const form = document.getElementById("formAchat");
+    const tableau = document.getElementById("tableAchats").getElementsByTagName("tbody")[0];
+
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      // Obtenir la date du jour au format YYYY-MM-DD
+      const dateSoumission = new Date().toISOString().split("T")[0];
+      const dateAchat = document.getElementById("dateAchat").value;
+      const montant = parseFloat(document.getElementById("montant").value).toFixed(2);
+      const code = document.getElementById("code").value.trim();
+      const titre = document.getElementById("titre").value.trim();
+
+      // Ajouter une nouvelle ligne dans le tableau
+      const ligne = tableau.insertRow();
+      ligne.innerHTML = `
+        <td>${dateSoumission}</td>
+        <td>${dateAchat}</td>
+        <td>${montant}</td>
+        <td>${code}</td>
+        <td>${titre}</td>
+      `;
+
+      // Réinitialiser le formulaire
+      form.reset();
+    });
+  </script>
+
+</body>
+</html>
