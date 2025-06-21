@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Formulaire Achat</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 0 15px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input[type="text"],
+    input[type="date"],
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    table {
+      margin-top: 30px;
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <h1>Formulaire Achat</h1>
+  <form id="achatForm">
+    <label>Date de soumission :</label>
+    <input type="text" id="dateSoumission" readonly />
+
+    <label for="dateAchat">Date d'achat :</label>
+    <input type="date" id="dateAchat" required />
+
+    <label for="montantAchat">Montant de l'achat :</label>
+    <input type="number" id="montantAchat" min="0" step="0.01" required />
+
+    <label for="code">Code :</label>
+    <input type="text" id="code" required />
+
+    <label for="titreActivite">Titre de l'activité :</label>
+    <input type="text" id="titreActivite" required />
+
+    <button type="submit">Ajouter</button>
+  </form>
+
+  <table id="tableauAchats">
+    <thead>
+      <tr>
+        <th>Date de soumission</th>
+        <th>Date d'achat</th>
+        <th>Montant</th>
+        <th>Code</th>
+        <th>Titre de l'activité</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    // Affiche la date du jour dans le champ dateSoumission
+    function dateDuJour() {
+      const aujourdhui = new Date();
+      const jj = String(aujourdhui.getDate()).padStart(2, '0');
+      const mm = String(aujourdhui.getMonth() + 1).padStart(2, '0'); // janvier = 0
+      const aaaa = aujourdhui.getFullYear();
+      return `${jj}/${mm}/${aaaa}`;
+    }
+
+    document.getElementById('dateSoumission').value = dateDuJour();
+
+    const form = document.getElementById('achatForm');
+    const tbody = document.querySelector('#tableauAchats tbody');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // Récupération des valeurs
+      const dateSoumission = document.getElementById('dateSoumission').value;
+      const dateAchat = document.getElementById('dateAchat').value;
+      const montant = parseFloat(document.getElementById('montantAchat').value).toFixed(2);
+      const code = document.getElementById('code').value.trim();
+      const titre = document.getElementById('titreActivite').value.trim();
+
+      // Vérification simple
+      if (!dateAchat || !montant || !code || !titre) {
+        alert('Merci de remplir tous les champs.');
+        return;
+      }
+
+      // Création d'une nouvelle ligne dans le tableau
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${dateSoumission}</td>
+        <td>${dateAchat}</td>
+        <td>${montant} €</td>
+        <td>${code}</td>
+        <td>${titre}</td>
+      `;
+
+      tbody.appendChild(tr);
+
+      // Réinitialiser le formulaire sauf date de soumission
+      form.reset();
+      document.getElementById('dateSoumission').value = dateDuJour();
+    });
+  </script>
+</body>
+</html>
